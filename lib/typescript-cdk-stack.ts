@@ -10,21 +10,23 @@ export class TypescriptCdkStack extends cdk.Stack {
     super(scope, id, props);
 
     const bucket = new s3.Bucket(this, "DocumentsBucket", {
-      encryption: s3.BucketEncryption.S3_MANAGED
+      encryption: s3.BucketEncryption.S3_MANAGED,
     });
 
     new cdk.CfnOutput(this, "DocumentsBucketNameExport", {
       exportName: "DocumentsBucketName",
-      value: bucket.bucketName
+      value: bucket.bucketName,
     });
 
     const networkingStack = new Networking(this, "NetworkingConstruct", {
-      maxAzs: 2
+      maxAzs: 2,
     });
 
     cdk.Tags.of(networkingStack).add("Module", "Networking");
 
-    const api = new DocumentManagementAPI(this, "DocumentManagementAPI");
+    const api = new DocumentManagementAPI(this, "DocumentManagementAPI", {
+      documentBucket: bucket
+    });
 
     cdk.Tags.of(api).add("Module", "API");
   }
