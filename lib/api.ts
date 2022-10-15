@@ -1,3 +1,4 @@
+import * as iam from "aws-cdk-lib/aws-iam";
 import * as lambda from "aws-cdk-lib/aws-lambda-nodejs";
 import * as path from "path";
 import * as s3 from "aws-cdk-lib/aws-s3";
@@ -18,7 +19,7 @@ export class DocumentManagementAPI extends Construct {
   ) {
     super(scope, id);
 
-    new lambda.NodejsFunction(this, "GetDocumentsFunction", {
+    const getDocumentsFunction = new lambda.NodejsFunction(this, "GetDocumentsFunction", {
       architecture: Architecture.ARM_64,
       bundling: {
         externalModules: ["aws-sdk"],
@@ -30,5 +31,15 @@ export class DocumentManagementAPI extends Construct {
       handler: "getDocuments",
       runtime: Runtime.NODEJS_16_X,
     });
+
+    const bucketPermissions = new iam.PolicyStatement();
+    bucketPermissions.addResources(`${props.documentBucket.bucketArn}/*`);
+    bucketPermissions.addActions("s3:GetObject", "s3:PutObject");
+    getDocumentsFunction.addToRolePolicy(bucketPermissions);
+
+    const bucketContainerPermissions = new iam.PolicyStatement();
+    bucketContainerPermissions.addResources(props.documentBucket.bucketArn);
+    bucketContainerPermissions.addActions("s3:ListBucket");
+    getDocumentsFunction.addToRolePolicy(bucketContainerPermissions);
   }
 }
