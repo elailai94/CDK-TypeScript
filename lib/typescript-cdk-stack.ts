@@ -12,7 +12,9 @@ export class TypescriptCdkStack extends cdk.Stack {
     super(scope, id, props);
 
     const bucket = new s3.Bucket(this, "DocumentsBucket", {
+      autoDeleteObjects: true,
       encryption: s3.BucketEncryption.S3_MANAGED,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
 
     new s3Deploy.BucketDeployment(this, "DocumentsDeployment", {
