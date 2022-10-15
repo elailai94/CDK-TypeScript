@@ -10,7 +10,7 @@ async function getDocuments(
   _event: APIGatewayProxyEventV2,
   _context: Context
 ): Promise<APIGatewayProxyStructuredResultV2> {
-  console.log(`bucketName: ${bucketName}`);
+  console.log(`Bucket Name: ${bucketName}`);
 
   return {
     body: "Success",
