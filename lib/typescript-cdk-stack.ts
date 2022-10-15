@@ -17,8 +17,10 @@ export class TypescriptCdkStack extends cdk.Stack {
       value: bucket.bucketName
     });
 
-    new Networking(this, "NetworkingConstruct", {
+    const networkingStack = new Networking(this, "NetworkingConstruct", {
       maxAzs: 2
     });
+
+    cdk.Tags.of(networkingStack).add("Module", "Networking");
   }
 }
