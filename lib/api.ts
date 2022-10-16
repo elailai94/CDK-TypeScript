@@ -1,4 +1,4 @@
-import * as apigateway from "aws-cdk-lib/aws-apigatewayv2";
+import * as apigateway from "@aws-cdk/aws-apigatewayv2-alpha";
 import * as cdk from "aws-cdk-lib";
 import * as iam from "aws-cdk-lib/aws-iam";
 import * as lambda from "aws-cdk-lib/aws-lambda-nodejs";
@@ -8,6 +8,7 @@ import * as s3 from "aws-cdk-lib/aws-s3";
 import { Architecture, Runtime } from "aws-cdk-lib/aws-lambda";
 
 import { Construct } from "constructs";
+import { HttpLambdaIntegration } from "@aws-cdk/aws-apigatewayv2-integrations-alpha";
 
 interface DocumentManagementAPIProps {
   documentBucket: s3.IBucket;
@@ -45,36 +46,29 @@ export class DocumentManagementAPI extends Construct {
     bucketContainerPermissions.addActions("s3:ListBucket");
     getDocumentsFunction.addToRolePolicy(bucketContainerPermissions);
 
-    const httpAPI = new apigateway.CfnApi(this, "HttpAPI", {
-      corsConfiguration: {
-        allowMethods: ["GET"],
-        allowOrigins: ["*"],
-        maxAge: cdk.Duration.days(10).toSeconds(),
+    const httpAPI = new apigateway.HttpApi(this, "HttpAPI", {
+      apiName: "document-management-api",
+      corsPreflight: {
+        allowMethods: [ apigateway.CorsHttpMethod.GET ],
+        allowOrigins: [ "*" ],
+        maxAge: cdk.Duration.days(10)
       },
-      name: "document-management-api",
-      protocolType: "HTTP",
+      createDefaultStage: true,
     });
 
-    const integration = new apigateway.CfnIntegration(
-      this,
-      "GetDocumentsIntegration",
-      {
-        apiId: httpAPI.ref,
-        integrationMethod: "GET",
-        integrationType: "AWS_PROXY",
-        integrationUri: `arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/${getDocumentsFunction.functionArn}/invocations`,
-        payloadFormatVersion: "2.0",
-      }
-    );
+    const integration = new HttpLambdaIntegration("GetDocumentsIntegration", getDocumentsFunction);
 
-    new apigateway.CfnRoute(this, "GetDocumentsRoute", {
-      apiId: httpAPI.ref,
-      routeKey: "GET /getDocuments",
-      target: `integrations/${integration.ref}`,
+    httpAPI.addRoutes({
+      integration,
+      methods: [
+        apigateway.HttpMethod.GET,
+      ],
+      path: "/getDocuments"
     });
 
     new cdk.CfnOutput(this, "APIEndpoint", {
-      value: httpAPI.attrApiEndpoint,
+      exportName: "APIEndpoint",
+      value: httpAPI.url!
     });
   }
 }
