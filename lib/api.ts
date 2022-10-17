@@ -18,7 +18,6 @@ export class DocumentManagementAPI extends Construct {
   constructor(scope: Construct, id: string, props: DocumentManagementAPIProps) {
     super(scope, id);
 
-    const region = cdk.Stack.of(this).region;
     const getDocumentsFunction = new lambda.NodejsFunction(
       this,
       "GetDocumentsFunction",
@@ -49,26 +48,27 @@ export class DocumentManagementAPI extends Construct {
     const httpAPI = new apigateway.HttpApi(this, "HttpAPI", {
       apiName: "document-management-api",
       corsPreflight: {
-        allowMethods: [ apigateway.CorsHttpMethod.GET ],
-        allowOrigins: [ "*" ],
-        maxAge: cdk.Duration.days(10)
+        allowMethods: [apigateway.CorsHttpMethod.GET],
+        allowOrigins: ["*"],
+        maxAge: cdk.Duration.days(10),
       },
       createDefaultStage: true,
     });
 
-    const integration = new HttpLambdaIntegration("GetDocumentsIntegration", getDocumentsFunction);
+    const integration = new HttpLambdaIntegration(
+      "GetDocumentsIntegration",
+      getDocumentsFunction
+    );
 
     httpAPI.addRoutes({
       integration,
-      methods: [
-        apigateway.HttpMethod.GET,
-      ],
-      path: "/getDocuments"
+      methods: [apigateway.HttpMethod.GET],
+      path: "/getDocuments",
     });
 
     new cdk.CfnOutput(this, "APIEndpoint", {
       exportName: "APIEndpoint",
-      value: httpAPI.url!
+      value: httpAPI.url!,
     });
   }
 }
