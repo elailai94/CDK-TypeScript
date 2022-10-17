@@ -12,6 +12,7 @@ app.set("view engine", "ejs");
 
 app.get("/", async (_request, response) => {
   const documents = await getDocuments();
+
   response.render("index", { documents });
 });
 

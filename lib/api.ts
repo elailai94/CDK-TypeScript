@@ -15,6 +15,8 @@ interface DocumentManagementAPIProps {
 }
 
 export class DocumentManagementAPI extends Construct {
+  public readonly httpAPI: apigateway.HttpApi;
+
   constructor(scope: Construct, id: string, props: DocumentManagementAPIProps) {
     super(scope, id);
 
@@ -45,7 +47,7 @@ export class DocumentManagementAPI extends Construct {
     bucketContainerPermissions.addActions("s3:ListBucket");
     getDocumentsFunction.addToRolePolicy(bucketContainerPermissions);
 
-    const httpAPI = new apigateway.HttpApi(this, "HttpAPI", {
+    this.httpAPI = new apigateway.HttpApi(this, "HttpAPI", {
       apiName: "document-management-api",
       corsPreflight: {
         allowMethods: [apigateway.CorsHttpMethod.GET],
@@ -60,7 +62,7 @@ export class DocumentManagementAPI extends Construct {
       getDocumentsFunction
     );
 
-    httpAPI.addRoutes({
+    this.httpAPI.addRoutes({
       integration,
       methods: [apigateway.HttpMethod.GET],
       path: "/getDocuments",
@@ -68,7 +70,7 @@ export class DocumentManagementAPI extends Construct {
 
     new cdk.CfnOutput(this, "APIEndpoint", {
       exportName: "APIEndpoint",
-      value: httpAPI.url!,
+      value: this.httpAPI.url!,
     });
   }
 }

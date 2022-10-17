@@ -5,6 +5,7 @@ import * as s3Deploy from "aws-cdk-lib/aws-s3-deployment";
 
 import { Construct } from "constructs";
 import { DocumentManagementAPI } from "./api";
+import { DocumentManagementWebserver } from "./webserver";
 import { Networking } from "./networking";
 
 export class TypescriptCdkStack extends cdk.Stack {
@@ -39,5 +40,12 @@ export class TypescriptCdkStack extends cdk.Stack {
     });
 
     cdk.Tags.of(api).add("Module", "API");
+
+    const webserver = new DocumentManagementWebserver(this, "DocumentManagementWebserver", {
+      api: api.httpAPI,
+      vpc: networkingStack.vpc
+    });
+
+    cdk.Tags.of(webserver).add("Module", "Webserver");
   }
 }
