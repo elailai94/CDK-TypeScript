@@ -3,6 +3,7 @@
 ![Amazon AWS](https://img.shields.io/badge/Amazon_AWS-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white)
 ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+
 ### About
 This repository contains practice code to provision infrastructure on Amazon Web Services (AWS) using the AWS Cloud Development Kit (CDK) and TypeScript. The code is based on the materials covered in the [AWS Infrastructure with TypeScript: Getting Started](https://www.pluralsight.com/courses/aws-infrastructure-typescript-getting-started) on Pluralsight by [David Tucker](https://github.com/davidtucker).
 
@@ -38,6 +39,9 @@ The `cdk diff` command compares the current version of the stack (and its depend
 
 ### Stack Deployment
 The `cdk deploy` command deploys the stack to the default AWS account and region.
+
+### Stack Watching
+The `cdk watch` command continuously monitors the CDK app's source files and assets for changes and immediately performs a deployment of the stack when a change is detected.
 
 ### Stack Destruction
 The `cdk destroy` command destroys the stack by removing resources according to their deletion policy. This command should be ran when the stack is no longer needed.
