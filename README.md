@@ -5,7 +5,7 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
 
 ### About
-This repository contains practice code to provision infrastructure on Amazon Web Services (AWS) using the AWS Cloud Development Kit (CDK) and TypeScript. The code is based on the materials covered in the [AWS Infrastructure with TypeScript: Getting Started](https://www.pluralsight.com/courses/aws-infrastructure-typescript-getting-started) on Pluralsight by [David Tucker](https://github.com/davidtucker).
+This repository contains practice code to provision infrastructure on Amazon Web Services (AWS) using the AWS Cloud Development Kit (CDK) and TypeScript. The code is based on the materials covered in the [AWS Infrastructure with TypeScript: Getting Started](https://www.pluralsight.com/courses/aws-infrastructure-typescript-getting-started) course on Pluralsight by [David Tucker](https://github.com/davidtucker).
 
 The `cdk.json` file tells the CDK how to execute the app. When the app is deployed, it creates an API Gateway, EC2 instance with a Docker container managed by ECS & Fargate, Lambda function and S3 bucket.
 
