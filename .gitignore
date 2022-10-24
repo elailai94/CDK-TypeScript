@@ -1,6 +1,7 @@
 *.js
 !jest.config.js
 *.d.ts
+cdk.context.json
 node_modules
 package-lock.json
 
