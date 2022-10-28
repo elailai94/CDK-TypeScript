@@ -1,4 +1,4 @@
-# TypeScript CDK
+# CDK TypeScript
 
 ![Amazon AWS](https://img.shields.io/badge/Amazon_AWS-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white)
 ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
@@ -47,4 +47,4 @@ The `cdk watch` command continuously monitors the CDK app's source files and ass
 The `cdk destroy` command destroys the stack by removing resources according to their deletion policy. This command should be ran when the stack is no longer needed.
 
 ### License
-* This repository is licensed under the [MIT License](https://github.com/elailai94/typescript-cdk/blob/main/LICENSE.md).
+* This repository is licensed under the [MIT License](https://github.com/elailai94/cdk-typescript/blob/main/LICENSE.md).
